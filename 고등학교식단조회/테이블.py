@@ -1,3 +1,4 @@
+#pip install pymysql
 import pymysql
 import csv
 
