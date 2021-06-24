@@ -15,6 +15,7 @@ requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 conn = pymysql.connect(host = 'localhost', user = 'root', password = '1234', db = 'testdb', charset='utf8')
 curs = conn.cursor()
 
+#한글, 숫자
 hangul = re.compile('[^ \u3131-\u3163\uac00-\ud7a3]+')
 non_decimal = re.compile(r'[^\d.]+')
 
@@ -36,8 +37,10 @@ while True:
         continue
 
     name = input('학교이름 입력 : ')
+    
     #공백제거
     name = name.replace(" ", "")
+    
     if name == "":
         print("\n잘못된 입력입니다\n")
         continue
@@ -52,7 +55,7 @@ while True:
         
         url = 'https://{0}/sts_sci_md01_001.do?schMmealScCode=2&schulCode={1}&schulCrseScCode=4&schulKndScCode=04&schYmd={2}'.format(sc[3], sc[0], date)
 
-        #사이트에 인증서가 없어도 접속o
+        #사이트에 인증서가 없어도 접속가능하게 설정
         response = requests.get(url, verify=False)
 
         if response.status_code == 200:
