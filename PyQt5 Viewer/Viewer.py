@@ -55,20 +55,27 @@ class MainView(QWidget):
         self.index = 0
         self.cb.clear()
 
-        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
-                                                  QFileDialog.ShowDirsOnly)
-        extension = self.extension.currentText()
-        path = str(self.dirName)
-        self.file_list = os.listdir(path)
-        self.file_list = [file for file in self.file_list if file.endswith(".{}".format(extension))]
+        try:
+            self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+                                                    QFileDialog.ShowDirsOnly)
+        except FileNotFoundError:
+            self.img.setText(" *경로를 찾을 수 없습니다*")
+        else:
+            extension = self.extension.currentText()
+            path = str(self.dirName)
+            self.file_list = os.listdir(path)
+            self.file_list = [file for file in self.file_list if file.endswith(".{}".format(extension))]
+            self.file_list = sorted(self.file_list)
 
-        for file in self.file_list:
-            self.cb.addItem(file)
-        if len(self.file_list) > 0:
-            img = QPixmap("{}/{}".format(str(self.dirName), str(self.file_list[0])))
-            img = img.scaledToHeight(700)
-            self.img.setPixmap(img)
-            self.index = 0
+            for file in self.file_list:
+                self.cb.addItem(file)
+            if len(self.file_list) > 0:
+                img = QPixmap("{}/{}".format(str(self.dirName), str(self.file_list[0])))
+                img = img.scaledToHeight(700)
+                self.img.setPixmap(img)
+                self.index = 0
+            else:
+                self.img.setText(" *파일을 찾을 수 없습니다*")
 
     def Open(self):
         if len(self.file_list) > 0:
