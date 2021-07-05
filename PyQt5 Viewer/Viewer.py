@@ -65,8 +65,7 @@ class MainView(QWidget):
             path = str(self.dirName)
             self.file_list = os.listdir(path)
             self.file_list = [file for file in self.file_list if file.endswith(".{}".format(extension))]
-            self.file_list = sorted(self.file_list)
-
+            self.file_list = sorted(self.file_list, key=len)
             for file in self.file_list:
                 self.cb.addItem(file)
             if len(self.file_list) > 0:
@@ -90,13 +89,15 @@ class MainView(QWidget):
             img = QPixmap("{}/{}".format(str(self.dirName), str(self.file_list[self.index])))
             img = img.scaledToHeight(700)
             self.img.setPixmap(img)
+            self.cb.setCurrentText(self.file_list[self.index])
 
     def Next(self):
-        if len(self.file_list) > 0 and self.index < len(self.file_list):
+        if len(self.file_list) > 0 and self.index < len(self.file_list) - 1:
             self.index += 1
             img = QPixmap("{}/{}".format(str(self.dirName), str(self.file_list[self.index])))
             img = img.scaledToHeight(700)
             self.img.setPixmap(img)
+            self.cb.setCurrentText(self.file_list[self.index])
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
