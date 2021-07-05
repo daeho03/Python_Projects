@@ -21,7 +21,7 @@ class MainView(QWidget):
 
         self.search = QPushButton("폴더선택")
         self.search.clicked.connect(self.OpenDir)
-        
+
         self.open = QPushButton("선택파일 열기")
         self.open.clicked.connect(self.Open)
         
@@ -61,11 +61,19 @@ class MainView(QWidget):
         except FileNotFoundError:
             self.img.setText(" *경로를 찾을 수 없습니다*")
         else:
+            #파일 가져오고 정렬
             extension = self.extension.currentText()
             path = str(self.dirName)
             self.file_list = os.listdir(path)
             self.file_list = [file for file in self.file_list if file.endswith(".{}".format(extension))]
             self.file_list = sorted(self.file_list, key=len)
+
+            #확장자 제거
+            n = 0
+            for file in self.file_list:
+                self.file_list[n] = file[:file.index('.')]
+                n += 1
+
             for file in self.file_list:
                 self.cb.addItem(file)
             if len(self.file_list) > 0:
